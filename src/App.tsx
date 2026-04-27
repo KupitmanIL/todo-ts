@@ -5,6 +5,8 @@ import Task from "./components/Task.tsx";
 function App() {
     const [tasks, setTasks] = useState<string[]>([]);
 
+    console.log(`App rendered`)
+
     const deleteTask = (index: number) => {
         const newTasks = [...tasks];
         newTasks.splice(index, 1);
