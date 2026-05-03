@@ -1,32 +1,42 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
+
 import './App.css'
+
 import Task from "./components/Task.tsx";
 
 function App() {
     const [tasks, setTasks] = useState<string[]>([]);
 
-    console.log(`App rendered`)
+    console.log(`App rendered`);
 
-    const deleteTask = (index: number) => {
-        const newTasks = [...tasks];
-        newTasks.splice(index, 1);
-        setTasks(newTasks);
-    }
+    const deleteTask = useCallback((index: number) => {
+        setTasks(prevTasks => prevTasks.filter((_, i) => i !== index));
+    }, []);
 
-    const editTask = (index: number, text: string) => {
-        const newTasks = [...tasks];
-        newTasks[index] = text;
-        setTasks(newTasks);
-    }
+    const editTask = useCallback((index: number, text: string) => {
+        setTasks(prevTasks =>
+            prevTasks.map((task, i) => i === index ? text : task)
+        );
+    }, []);
 
     const addTask = () => {
-        setTasks([...tasks, 'New task']);
-    }
+        setTasks(prevTasks => [...prevTasks, 'New task']);
+    };
 
     return (
         <div className={'field'}>
             <button className={'btn new'} onClick={addTask}>Add task</button>
-            {tasks.map((t, i) => <Task key={i + 1} index={i} edit={editTask} remove={deleteTask}>{t}</Task>)}
+
+            {tasks.map((t, i) => (
+                <Task
+                    key={i}
+                    index={i}
+                    edit={editTask}
+                    remove={deleteTask}
+                >
+                    {t}
+                </Task>
+            ))}
         </div>
     )
 }

@@ -1,4 +1,4 @@
-import {useRef, useState} from "react";
+import { memo, useRef, useState } from "react";
 
 interface Props {
     children: string,
@@ -9,6 +9,7 @@ interface Props {
 
 const Task = ({children, index, remove, edit}: Props) => {
     const [isEditing, setIsEditing] = useState(false);
+
     const textId = useRef<HTMLTextAreaElement>(null);
 
     console.log(`Task rendered: ${children}, index: ${index}`);
@@ -33,15 +34,15 @@ const Task = ({children, index, remove, edit}: Props) => {
                 <button onClick={handleClickSave} className={'btn success'}>Save</button>
             </div>
         )
-    } else {
-        return (
-            <div className={'box'}>
-                <div>{children}</div>
-                <button onClick={handleClickEdit} className={'btn light'}>Edit</button>
-                <button onClick={handleClickRemove} className={'btn red'}>Remove</button>
-            </div>
-        )
     }
+
+    return (
+        <div className={'box'}>
+            <div>{children}</div>
+            <button onClick={handleClickEdit} className={'btn light'}>Edit</button>
+            <button onClick={handleClickRemove} className={'btn red'}>Remove</button>
+        </div>
+    )
 }
 
-export default Task;
+export default memo(Task);
