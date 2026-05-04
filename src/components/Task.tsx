@@ -1,29 +1,29 @@
 import { memo, useRef, useState } from "react";
 
 interface Props {
-    children: string,
-    index: number,
-    remove: (index: number) => void,
-    edit: (index: number, text: string) => void
+    children: string;
+    id: number;
+    remove: (id: number) => void;
+    edit: (id: number, text: string) => void;
 }
 
-const Task = ({children, index, remove, edit}: Props) => {
+const Task = ({children, id, remove, edit}: Props) => {
     const [isEditing, setIsEditing] = useState(false);
 
     const textId = useRef<HTMLTextAreaElement>(null);
 
-    console.log(`Task rendered: ${children}, index: ${index}`);
+    console.log(`Task rendered: ${children}, id: ${id}`);
 
     const handleClickEdit = () => {
         setIsEditing(true);
     }
 
     const handleClickRemove = () => {
-        remove(index);
+        remove(id);
     }
 
     const handleClickSave = () => {
-        edit(index, textId.current!.value);
+        edit(id, textId.current!.value);
         setIsEditing(false);
     }
 

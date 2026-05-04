@@ -4,37 +4,49 @@ import './App.css'
 
 import Task from "./components/Task.tsx";
 
+type TaskType = {
+    id: number;
+    text: string;
+};
+
 function App() {
-    const [tasks, setTasks] = useState<string[]>([]);
+    const [tasks, setTasks] = useState<TaskType[]>([]);
 
     console.log(`App rendered`);
 
-    const deleteTask = useCallback((index: number) => {
-        setTasks(prevTasks => prevTasks.filter((_, i) => i !== index));
+    const deleteTask = useCallback((id: number) => {
+        setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
     }, []);
 
-    const editTask = useCallback((index: number, text: string) => {
+    const editTask = useCallback((id: number, text: string) => {
         setTasks(prevTasks =>
-            prevTasks.map((task, i) => i === index ? text : task)
+            prevTasks.map(task =>
+                task.id === id ? { ...task, text } : task
+            )
         );
     }, []);
 
     const addTask = () => {
-        setTasks(prevTasks => [...prevTasks, 'New task']);
+        const newTask: TaskType = {
+            id: Date.now(),
+            text: 'New task'
+        };
+
+        setTasks(prevTasks => [...prevTasks, newTask]);
     };
 
     return (
         <div className={'field'}>
             <button className={'btn new'} onClick={addTask}>Add task</button>
 
-            {tasks.map((t, i) => (
+            {tasks.map(task => (
                 <Task
-                    key={i}
-                    index={i}
+                    key={task.id}
+                    id={task.id}
                     edit={editTask}
                     remove={deleteTask}
                 >
-                    {t}
+                    {task.text}
                 </Task>
             ))}
         </div>
